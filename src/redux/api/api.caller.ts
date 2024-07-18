@@ -3,7 +3,7 @@ import customBaseQuery from "./fetchBase";
 import { IUserResponse } from "../../types/users";
 import { IMenuResponse } from "../../types/menu";
 import { IEmployeeResponse } from "../../types/employee";
-
+import { ITableResponse } from "../../types/table";
 export const apiCaller = createApi({
   reducerPath: "apiCaller",
   refetchOnMountOrArgChange: 30,
@@ -48,6 +48,25 @@ export const apiCaller = createApi({
         method: "GET",
       }),
     }),
+    getTable: builder.query<ITableResponse, void>({
+      query: () => ({
+        url: `/tables/all?page=0&limit=10`,
+        method: "GET",
+      }),
+    }),
+    deleteTable: builder.mutation<void, { tableId: number }>({
+      query: ({ tableId }) => ({
+        url: `/tables/${tableId}`,
+        method: "DELETE",
+      }),
+    }),
+    addTable: builder.mutation<void, { numberOfTable: number }>({
+      query: ({ numberOfTable }) => ({
+        url: `/tables/add?numberOfTables=${numberOfTable}`,
+        method: 'POST',
+      }),
+    }),
+    
   }),
 });
 
@@ -58,4 +77,7 @@ export const {
   useSettingUserQuery,
   useGetMenuQuery,
   useFilterMenuQuery,
+  useGetTableQuery,
+  useDeleteTableMutation,
+  useAddTableMutation,
 } = apiCaller;
