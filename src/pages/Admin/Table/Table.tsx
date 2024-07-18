@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import TableOfTable from "../../../components/organisms/Table/TableOfTable";
+import TableOfTable from "./TableOfTable";
 
 export default function Table() {
   return (
