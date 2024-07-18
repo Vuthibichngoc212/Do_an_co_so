@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 import {
   Box,
   Table,
@@ -8,8 +8,8 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button
-} from '@mui/material';
+  Button,
+} from "@mui/material";
 
 interface Props {
   columns: string[];
@@ -22,16 +22,20 @@ const ReusableTable: React.FC<Props> = ({
   columns,
   children,
   columnWidths = [],
-  onClickAddProduct
+  onClickAddProduct,
 }) => {
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ pb: 1 }}>
-        <Button variant="contained" color="primary" onClick={onClickAddProduct}>
-          Thêm sản phẩm
+    <Box sx={{ width: "100%", mt: 3, overflow: "auto" }}>
+      <Box sx={{ mb: 3 }}>
+        <Button
+          variant="contained"
+          onClick={onClickAddProduct}
+          sx={{ backgroundColor: "#4E8D7C", textTransform: "none" }}
+        >
+          Thêm nhân viên
         </Button>
       </Box>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-label="customizable table">
             <TableHead>
@@ -39,10 +43,9 @@ const ReusableTable: React.FC<Props> = ({
                 {columns.map((column, index) => (
                   <TableCell
                     key={index}
-                    // align={index === 0 ? 'left' : 'right'}
                     sx={{
-                      fontWeight: 'bold',
-                      width: columnWidths[index] || 'auto'
+                      fontWeight: "bold",
+                      width: columnWidths[index] || "auto",
                     }}
                   >
                     {column}

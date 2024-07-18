@@ -34,7 +34,7 @@ const customBaseQuery = () => {
     const response = await baseQuery(args, api, {});
     if (response.error?.status === 401) {
       localStorage.removeItem("token");
-      window.location.href = "/login";
+      window.location.href = "/admin";
     }
     return response;
   };
