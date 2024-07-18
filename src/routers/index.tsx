@@ -9,7 +9,7 @@ const AppRoutes = () => {
       <Routes>
         {routes.map((route) => (
           <Route key={route.label} path={route.path} element={<route.layout />}>
-            {route.children ? (
+            {route.children &&
               route.children.map((child) => (
                 <Route
                   key={child.label}
@@ -20,8 +20,8 @@ const AppRoutes = () => {
                     </Suspense>
                   }
                 />
-              ))
-            ) : (
+              ))}
+            {route.component && (
               <Route
                 index
                 element={
@@ -31,14 +31,6 @@ const AppRoutes = () => {
                 }
               />
             )}
-            <Route
-              index
-              element={
-                <Suspense fallback={<LazyLoading />}>
-                  <route.component />
-                </Suspense>
-              }
-            />
           </Route>
         ))}
       </Routes>
