@@ -5,42 +5,64 @@ import Delete from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import { useGetUsersQuery } from "../../../redux/api/api.caller";
+import {
+  useDeleteUsersMutation,
+  useGetUsersQuery,
+} from "../../../redux/api/api.caller";
 import { IEmployee } from "../../../types/employee";
 import ReusableTable from "../../../components/organisms/TableControl";
 import EmployeesDialog from "./EmployeesDialog/EmployeesDialog";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
-const AdProductsPage = () => {
-  const { data: response } = useGetUsersQuery();
+const Employees = () => {
+  const { data: response, refetch } = useGetUsersQuery();
+  const [deleteUsers] = useDeleteUsersMutation();
   const employees: IEmployee[] = response?.data.userResponses || [];
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const [mode, setMode] = useState<"add" | "edit">("add");
-  const [selectedProduct, setSelectedProduct] = useState<IEmployee | null>(
-    null
-  );
+  const [selectedUsers, setSelectedUsers] = useState<IEmployee | null>(null);
 
   const handleAddProduct = () => {
     setMode("add");
-    setSelectedProduct(null);
+    setSelectedUsers(null);
     setOpenDialog(true);
   };
 
-  // const handleEditProduct = (product: IEmployee) => {
-  //   setMode('edit');
-  //   setSelectedProduct(product);
-  //   setOpenDialog(true);
-  // };
+  const handleEditProduct = (users: IEmployee) => {
+    setMode("edit");
+    setSelectedUsers(users);
+    setOpenDialog(true);
+  };
+
+  const handleDeleteProduct = async (userId: string) => {
+    try {
+      await deleteUsers(userId).unwrap();
+      toast.success("Xóa nhân viên thành công", {
+        position: "bottom-right",
+        autoClose: 1000,
+        theme: "colored",
+      });
+      refetch();
+    } catch (error) {
+      toast.error("Xóa nhân viên thất bại", {
+        theme: "colored",
+        autoClose: 1000,
+        position: "bottom-right",
+      });
+    }
+  };
 
   return (
     <>
+      <ToastContainer />
       <ReusableTable
         columns={[
           "STT",
           "UserName",
-          "Name",
+          "Full Name",
           "Email",
           "Phone",
           "Adress",
@@ -54,19 +76,19 @@ const AdProductsPage = () => {
             <TableRow key={user.id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{user.username}</TableCell>
-              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.fullname}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.phoneNumber}</TableCell>
               <TableCell>{user.address}</TableCell>
               <TableCell>
                 <Tooltip title="Edit">
                   <IconButton>
-                    <EditIcon />
+                    <EditIcon onClick={() => handleEditProduct(user)} />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Delete">
                   <IconButton>
-                    <Delete />
+                    <Delete onClick={() => handleDeleteProduct(user.id)} />
                   </IconButton>
                 </Tooltip>
               </TableCell>
@@ -77,10 +99,10 @@ const AdProductsPage = () => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         mode={mode}
-        product={selectedProduct}
+        users={selectedUsers}
       />
     </>
   );
 };
 
-export default AdProductsPage;
+export default Employees;

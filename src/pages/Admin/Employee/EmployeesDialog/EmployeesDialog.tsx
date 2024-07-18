@@ -7,55 +7,98 @@ import TextField from "@mui/material/TextField";
 import { ToastContainer, toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { IEmployee } from "../../../../types/employee";
-import { useCreateUsersMutation } from "../../../../redux/api/api.caller";
+import {
+  useCreateUsersMutation,
+  useUpdateUsersMutation,
+} from "../../../../redux/api/api.caller";
+import { useEffect } from "react";
 
 export interface Props {
   open: boolean;
   onClose: () => void;
   mode: "add" | "edit";
-  product: IEmployee | null;
+  users: IEmployee | null;
 }
 
-const EmployeesDialog = ({ open, onClose, mode }: Props) => {
+const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
   const [addEmployees] = useCreateUsersMutation();
+  const [updateEmployees] = useUpdateUsersMutation();
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<IEmployee>({
     defaultValues: {
       username: "",
       password: "",
-      name: "",
+      fullname: "",
       email: "",
       phoneNumber: "",
       address: "",
       role: 1,
     },
   });
-  const title = mode === "add" ? "Thêm sản phẩm" : "Chỉnh sửa sản phẩm";
+
+  const title = mode === "add" ? "Thêm nhân viên" : "Chỉnh sửa nhân viên";
+
+  useEffect(() => {
+    if (mode === "edit" && users) {
+      setValue("username", users.username);
+      setValue("password", users.password);
+      setValue("fullname", users.fullname);
+      setValue("email", users.email);
+      setValue("phoneNumber", users.phoneNumber);
+      setValue("address", users.address);
+    } else {
+      reset();
+    }
+  }, [mode, users, setValue, reset]);
 
   const onSubmit = async (employeeData: IEmployee) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await addEmployees(employeeData).then((data: any) => {
-      if (data?.data) {
-        toast.success("Thêm nhân viên thành công", {
-          position: "bottom-right",
-          autoClose: 1000,
-          theme: "colored",
-        });
-        reset();
-        onClose();
-      } else {
-        toast.error("Thêm nhân viên thất bại", {
-          theme: "colored",
-          autoClose: 1000,
-          position: "bottom-right",
-        });
-      }
-    });
+    if (mode === "add") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await addEmployees(employeeData).then((data: any) => {
+        if (data?.data) {
+          toast.success("Thêm nhân viên thành công", {
+            position: "bottom-right",
+            autoClose: 1000,
+            theme: "colored",
+          });
+          reset();
+          onClose();
+        } else {
+          toast.error("Thêm nhân viên thất bại", {
+            theme: "colored",
+            autoClose: 1000,
+            position: "bottom-right",
+          });
+        }
+      });
+    } else if (mode === "edit" && users) {
+      await updateEmployees({ userId: users.id, ...employeeData }).then(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (data: any) => {
+          if (data?.data) {
+            toast.success("Chỉnh sửa nhân viên thành công", {
+              position: "bottom-right",
+              autoClose: 1000,
+              theme: "colored",
+            });
+            reset();
+            onClose();
+          } else {
+            toast.error("Chỉnh sửa nhân viên thất bại", {
+              theme: "colored",
+              autoClose: 1000,
+              position: "bottom-right",
+            });
+          }
+        }
+      );
+    }
   };
 
   return (
@@ -85,15 +128,31 @@ const EmployeesDialog = ({ open, onClose, mode }: Props) => {
               error={!!errors.password}
               helperText={errors.password?.message}
             />
+            {mode === "edit" && (
+              <TextField
+                placeholder="retypePassword"
+                margin="dense"
+                type="text"
+                fullWidth
+                variant="outlined"
+                {...register("retypePassword", {
+                  required: "retypePassword là bắt buộc",
+                })}
+                error={!!errors.retypePassword}
+                helperText={errors.retypePassword?.message}
+              />
+            )}
             <TextField
-              placeholder="Name"
+              placeholder="FullName"
               margin="dense"
               type="text"
               fullWidth
               variant="outlined"
-              {...register("name", { required: "Tên nhân viên là bắt buộc" })}
-              error={!!errors.name}
-              helperText={errors.name?.message}
+              {...register("fullname", {
+                required: "Tên nhân viên là bắt buộc",
+              })}
+              error={!!errors.fullname}
+              helperText={errors.fullname?.message}
             />
             <TextField
               placeholder="Email"
@@ -116,7 +175,7 @@ const EmployeesDialog = ({ open, onClose, mode }: Props) => {
               helperText={errors.phoneNumber?.message}
             />
             <TextField
-              placeholder="Adress"
+              placeholder="Address"
               margin="dense"
               fullWidth
               variant="outlined"

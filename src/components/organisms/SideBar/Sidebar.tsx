@@ -178,7 +178,8 @@ const SideBar: React.FC = () => {
                     selectedItem === item.id ? "#4E8D7C" : "transparent",
                   color: selectedItem === item.id ? "#fff" : "black",
                   "&:hover": {
-                    backgroundColor: "#e0e0e0",
+                    backgroundColor:
+                      selectedItem === item.id ? "#4E8D7C" : "e0e0e0",
                   },
                 }}
               >

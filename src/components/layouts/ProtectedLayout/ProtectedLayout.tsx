@@ -33,7 +33,7 @@ function ProtectedLayout() {
           <Stack
             sx={{
               width: "100%",
-              padding: 2,
+              padding: 3,
             }}
           >
             <Header />
