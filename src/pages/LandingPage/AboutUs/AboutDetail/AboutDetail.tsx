@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import MenuBar from "../../../../components/organisms/Menu/menuBar";
 import useStyles from "./AboutDetail.style";
+import Footer from "../../../../components/organisms/Footer/Footer";
 
 const AboutDetail = () => {
   const classes = useStyles();
@@ -112,6 +113,7 @@ const AboutDetail = () => {
           </Typography>
         </Box>
       </Box>
+      <Footer />
     </Box>
   );
 };

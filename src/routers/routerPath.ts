@@ -11,6 +11,7 @@ export const routes = [
     component: React.lazy(
       () => import("../pages/LandingPage/LandingPageScreen")
     ),
+    exact: true,
     children: [
       {
         label: "About Detail",
@@ -18,6 +19,42 @@ export const routes = [
         component: React.lazy(
           () => import("../pages/LandingPage/AboutUs/AboutDetail/AboutDetail")
         ),
+      },
+    ],
+  },
+  {
+    label: "Admin",
+    path: ROUTE_PATH.ADMIN.INDEX,
+    layout: BlankLayout,
+    component: React.lazy(() => import("../pages/Admin/Login/Login")),
+    exact: true,
+  },
+  {
+    label: "Admin Dashboard",
+    path: ROUTE_PATH.ADMIN.INDEX,
+    layout: ProtectedLayout,
+    children: [
+      {
+        label: "Admin list",
+        path: ROUTE_PATH.ADMIN.DASHBOARD,
+        component: React.lazy(
+          () => import("../pages/Admin/Dashboard/Dashboard")
+        ),
+      },
+      {
+        label: "Employee",
+        path: ROUTE_PATH.ADMIN.EMPLOYEE,
+        component: React.lazy(() => import("../pages/Admin/Employee/Employee")),
+      },
+      {
+        label: "Menu",
+        path: ROUTE_PATH.ADMIN.MENU,
+        component: React.lazy(() => import("../pages/Admin/Menu/Menu")),
+      },
+      {
+        label: "table",
+        path: ROUTE_PATH.ADMIN.TABLE,
+        component: React.lazy(() => import("../pages/Admin/Table/Table")),
       },
     ],
   },

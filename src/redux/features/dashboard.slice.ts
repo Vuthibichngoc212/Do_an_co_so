@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { IUser } from "../../types/users";
-import { IMenu } from "../../types/menu";
+import { IMenuItem } from "../../types/menu";
 
 export interface IDashboardState {
   users: IUser[];
-  menus: IMenu[];
+  menus: IMenuItem[];
 }
 
 const initialState: IDashboardState = {
@@ -20,7 +20,7 @@ export const dashboardSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser>) => {
       state.users = [...state.users, action.payload];
     },
-    setMenu: (state, action: PayloadAction<IMenu>) => {
+    setMenu: (state, action: PayloadAction<IMenuItem>) => {
       state.menus = [...state.menus, action.payload];
     },
   },
