@@ -179,6 +179,7 @@ const SideBar: React.FC = () => {
                     backgroundColor:
                       selectedItem === item.id ? "#4E8D7C" : "e0e0e0",
                   },
+                  mb: 1,
                 }}
               >
                 <ListItemIcon>

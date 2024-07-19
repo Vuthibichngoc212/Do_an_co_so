@@ -126,15 +126,29 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead>
-      <TableRow>
+    <TableHead
+      sx={{
+        bgcolor: "#F9FAFB",
+        borderRadius: "16px",
+      }}
+    >
+      <TableRow
+        sx={{
+          bgcolor: "#F9FAFB",
+          borderRadius: "16px",
+        }}
+      >
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={"left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ width: "33.3%", textAlign: "center", bgcolor: "#F9FAFB" }}
+            sx={{
+              width: "33.3%",
+              textAlign: "center",
+              bgcolor: "#F9FAFB",
+            }}
           >
             {headCell.id === "category" ? (
               <TableSortLabel
@@ -285,15 +299,20 @@ export default function MenuTable() {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", borderRadius: 1 }}>
       <Paper
         sx={{
           width: "100%",
           mb: 2,
+          borderRadius: "16px",
           boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)",
         }}
       >
-        <TableContainer>
+        <TableContainer
+          sx={{
+            borderRadius: "16px",
+          }}
+        >
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
               order={order}

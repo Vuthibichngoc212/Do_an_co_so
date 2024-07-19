@@ -40,7 +40,7 @@ function ProtectedLayout() {
             <Stack
               sx={{
                 paddingBottom: "4.4rem",
-                width: "97%",
+                width: "100%",
               }}
             >
               {outlet}

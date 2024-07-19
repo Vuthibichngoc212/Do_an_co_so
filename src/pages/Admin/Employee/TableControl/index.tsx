@@ -50,17 +50,29 @@ const ReusableTable: React.FC<Props> = ({
           Thêm nhân viên
         </Button>
       </Box>
-      <Box>
+      <Box
+        sx={{
+          width: "100%",
+          borderRadius: "16px",
+        }}
+      >
         <Paper
           sx={{
             mb: 2,
             border: "1px solid #ddd",
-            borderRadius: "8px",
-            boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)",
+
+            borderRadius: "16px",
           }}
         >
-          <TableContainer>
-            <Table sx={{ minWidth: 750 }} aria-label="customizable table">
+          <TableContainer
+            sx={{
+              borderRadius: "16px",
+            }}
+          >
+            <Table
+              sx={{ minWidth: 750, borderRadius: "16px" }}
+              aria-label="customizable table"
+            >
               <TableHead>
                 <TableRow>
                   {columns.map((column, index) => (
