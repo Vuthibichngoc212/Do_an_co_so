@@ -392,10 +392,33 @@ export default function MenuTable() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
+          <Button
+            onClick={handleCancelDelete}
+            variant="outlined"
+            sx={{
+              backgroundColor: "#FFF",
+              textTransform: "none",
+              color: "#4E8D7C",
+              borderColor: "#4E8D7C",
+              "&:hover": {
+                backgroundColor: "#3A6B5D",
+                color: "#FFF",
+                borderColor: "#3A6B5D",
+              },
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            sx={{
+              backgroundColor: "#4E8D7C",
+              textTransform: "none",
+              "&:hover": { backgroundColor: "#3A6B5D" },
+            }}
+            autoFocus
+          >
             Delete
           </Button>
         </DialogActions>
