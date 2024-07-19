@@ -5,31 +5,50 @@ import {
   useFilterMenuQuery,
   useGetMenuQuery,
 } from "../../../redux/api/api.caller";
+import LazyLoading from "../../../components/LazyLoading";
 
 const SpecialMenu = () => {
   const classes = useStyles();
-  const { data: listMenu, refetch: refetchListMenu } = useGetMenuQuery();
+  const {
+    data: listMenu,
+    refetch: refetchListMenu,
+    isLoading: isListLoading,
+  } = useGetMenuQuery();
 
   const [category, setCategory] = useState<string | null>(null);
-  const { data: filterMenu, refetch: refetchFilterMenu } = useFilterMenuQuery(
-    { category: category as string },
-    { skip: !category }
-  );
+  const [showAllItems, setShowAllItems] = useState<boolean>(false);
+
+  const {
+    data: filterMenu,
+    refetch: refetchFilterMenu,
+    isFetching: isFilterFetching,
+  } = useFilterMenuQuery({ category: category as string }, { skip: !category });
 
   useEffect(() => {
     if (category) {
       refetchFilterMenu();
+      setShowAllItems(false);
     }
   }, [category, refetchFilterMenu]);
 
   const handleCategoryClick = (clickedCategory: string) => {
     setCategory(clickedCategory === category ? null : clickedCategory);
+    setShowAllItems(false);
   };
 
   const handleShowAll = () => {
     setCategory(null);
     refetchListMenu();
+    setShowAllItems(false);
   };
+
+  const handleLoadMore = () => {
+    setShowAllItems(true);
+  };
+
+  if (isListLoading || (category && isFilterFetching)) {
+    return <LazyLoading />;
+  }
 
   if (!listMenu || !listMenu.data) {
     return <Typography>No data available.</Typography>;
@@ -39,6 +58,11 @@ const SpecialMenu = () => {
     (item) => item.category
   );
   const uniqueCategories = [...new Set(allCategories)];
+
+  const currentMenu = category
+    ? filterMenu?.data?.menuItemResponseList
+    : listMenu.data.menuItemResponseList;
+  const displayedItems = currentMenu?.slice(0, showAllItems ? undefined : 10);
 
   return (
     <Box id="special-menu" sx={{ marginTop: "50px" }}>
@@ -67,10 +91,7 @@ const SpecialMenu = () => {
       </Box>
 
       <Grid container spacing={2} sx={{ px: 16 }}>
-        {(category
-          ? filterMenu?.data?.menuItemResponseList
-          : listMenu.data.menuItemResponseList
-        )?.map((item) => (
+        {displayedItems?.map((item) => (
           <Grid
             item
             xs={12}
@@ -105,6 +126,18 @@ const SpecialMenu = () => {
           </Grid>
         ))}
       </Grid>
+
+      {currentMenu && currentMenu.length > 10 && !showAllItems && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Button
+            variant="contained"
+            onClick={handleLoadMore}
+            className={classes.button}
+          >
+            Xem thêm
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
