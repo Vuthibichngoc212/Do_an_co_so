@@ -2,8 +2,6 @@ import * as React from "react";
 import { useEffect, useState, useMemo } from "react";
 import {
   Box,
-  Checkbox,
-  IconButton,
   Paper,
   Table,
   TableBody,
@@ -13,31 +11,21 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-  Toolbar,
-  Tooltip,
   Typography,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { visuallyHidden } from "@mui/utils";
-import {
-  useGetTableQuery,
-  useAddTableMutation,
-} from "../../../redux/api/api.caller";
+import { useGetTableQuery } from "../../../redux/api/api.caller";
 import { ITableItem } from "../../../types/table";
+import LazyLoading from "../../../components/LazyLoading";
+
 interface Data {
+  stt: number;
   id: number;
   status: string;
 }
 
-function createData(id: number, status: string): Data {
-  return { id, status };
+function createData(stt: number, id: number, status: string): Data {
+  return { stt, id, status };
 }
 
 const headCells: {
@@ -46,6 +34,12 @@ const headCells: {
   disablePadding: boolean;
   label: string;
 }[] = [
+  {
+    id: "stt",
+    numeric: true,
+    disablePadding: true,
+    label: "STT",
+  },
   {
     id: "id",
     numeric: true,
@@ -63,8 +57,6 @@ const headCells: {
 type Order = "asc" | "desc";
 
 interface EnhancedTableProps {
-  numSelected: number;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -113,14 +105,7 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
@@ -129,20 +114,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell
-          padding="checkbox"
-          sx={{ width: "5%", textAlign: "center", bgcolor: "#F9FAFB" }}
-        >
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all items",
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -170,66 +141,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-  onRequestAdd: () => void; // Callback to handle adding tables
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, onRequestAdd } = props;
-
-  return (
-    <Toolbar>
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        ></Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Add new tables">
-          <IconButton onClick={onRequestAdd}>
-            <AddCircleOutlineIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
-
 export default function TableOfTable() {
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof Data>("status");
-  const [selected, setSelected] = useState<readonly number[]>([]);
+  const [orderBy, setOrderBy] = useState<keyof Data>("stt");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [numberOfTables, setNumberOfTables] = useState(1);
   const { data, error, isLoading } = useGetTableQuery();
   const [rows, setRows] = useState<Data[]>([]);
-  const [addTableMutation] = useAddTableMutation();
+
   useEffect(() => {
     if (data && data.data && Array.isArray(data.data)) {
-      const tableRows = data.data.map((table: ITableItem) =>
-        createData(table.id, table.status)
+      const tableRows = data.data.map((table: ITableItem, index: number) =>
+        createData(index + 1, table.id, table.status)
       );
       setRows(tableRows);
     } else if (error) {
@@ -238,7 +161,7 @@ export default function TableOfTable() {
   }, [data, error]);
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    _event: React.MouseEvent<unknown>,
     property: keyof Data
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -246,35 +169,7 @@ export default function TableOfTable() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -284,8 +179,6 @@ export default function TableOfTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -300,31 +193,13 @@ export default function TableOfTable() {
   );
 
   if (isLoading) {
-    return <Typography>Loading...</Typography>;
+    return <LazyLoading />;
   }
 
   if (error) {
     return <Typography>Error loading tables</Typography>;
   }
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-  };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-  const handleAddTables = () => {
-    addTableMutation({ numberOfTable: numberOfTables })
-      .unwrap()
-      .then(() => {
-        console.log(`${numberOfTables} tables added successfully!`);
-        setOpenDialog(false);
-      })
-      .catch((error) => {
-        console.error("Failed to add tables:", error);
-        alert("Failed to add tables. Please try again later.");
-      });
-  };
   return (
     <Box sx={{ width: "100%" }}>
       <Paper
@@ -334,45 +209,20 @@ export default function TableOfTable() {
           boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)",
         }}
       >
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          onRequestAdd={handleOpenDialog}
-        />
-
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox" sx={{ textAlign: "center" }}>
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
+                  <TableRow hover tabIndex={-1} key={row.id}>
                     <TableCell
                       component="th"
                       id={labelId}
@@ -380,8 +230,9 @@ export default function TableOfTable() {
                       padding="none"
                       sx={{ textAlign: "center" }}
                     >
-                      {row.id}
+                      {row.stt}
                     </TableCell>
+                    <TableCell sx={{ textAlign: "center" }}>{row.id}</TableCell>
                     <TableCell sx={{ textAlign: "center" }}>
                       {row.status}
                     </TableCell>
@@ -410,25 +261,6 @@ export default function TableOfTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Add Tables</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="numberOfTables"
-            label="Number of Tables"
-            type="number"
-            fullWidth
-            value={numberOfTables}
-            onChange={(e) => setNumberOfTables(parseInt(e.target.value, 10))}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleAddTables}>Add</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

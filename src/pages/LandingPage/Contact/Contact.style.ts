@@ -6,8 +6,8 @@ const useStyles = makeStyles(() => ({
       fontSize: "2.5rem",
     },
     "&.MuiButtonBase-root": {
-      backgroundColor: "#f9df9b",
-      color: "#a2770d",
+      backgroundColor: "#D5BBA2",
+      color: "#4B2C20",
       borderRadius: "50%",
       padding: "20px",
       marginBottom: "20px",

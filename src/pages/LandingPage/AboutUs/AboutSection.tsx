@@ -36,7 +36,7 @@ const AboutSection = () => {
               mb: 2,
               fontWeight: "bold",
               textTransform: "uppercase",
-              color: "#e4a812",
+              color: "black",
             }}
           >
             # Giới thiệu
@@ -50,29 +50,27 @@ const AboutSection = () => {
             }}
           >
             Chào mừng đến với{" "}
-            <span style={{ color: theme.palette.error.main }}>
-              nhà hàng ABC
-            </span>
+            <span style={{ color: "#4E8D7C" }}>nhà hàng ABC</span>
           </Typography>
           <Typography variant="body1" sx={{ color: "#625b5b", mb: 4 }}>
-            Thương hiệu Lẩu Nấm Gia Khánh được thành lập năm 2008, phát triển
-            không ngừng & dần khẳng định được vị thế của mình trong làng ẩm thực
-            Việt Nam. Với tiêu chí mỗi sản phẩm đều được qua sàng lọc, chất
-            chiu, tinh khiết và quý báu nhất từ thiên nhiên. Nhằm mang đến cho
-            thực khách những món ăn có giá trị về chất lượng và luôn lấy tiêu
-            chí “sức khỏe con người làm trung tâm”.
+            Thương hiệu Nhà Hàng 5 Sao được thành lập năm 2008, phát triển không
+            ngừng & dần khẳng định được vị thế của mình trong làng ẩm thực Việt
+            Nam. Với tiêu chí mỗi sản phẩm đều được qua sàng lọc, chất chiu,
+            tinh khiết và quý báu nhất từ thiên nhiên. Nhằm mang đến cho thực
+            khách những món ăn có giá trị về chất lượng và luôn lấy tiêu chí
+            “sức khỏe con người làm trung tâm”.
           </Typography>
           <Button
             onClick={() => navigate("/about")}
             sx={{
-              backgroundColor: theme.palette.error.main,
+              backgroundColor: "#D5BBA2",
               padding: "10px 20px",
-              color: "#fff",
+              color: "#4B2C20",
               borderRadius: "8px",
               textTransform: "none",
               "&:hover": {
                 outline: "none",
-                backgroundColor: theme.palette.error.dark,
+                backgroundColor: "#B89574",
               },
               "&:focus": {
                 outline: "none",

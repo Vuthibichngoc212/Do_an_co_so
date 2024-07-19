@@ -18,9 +18,9 @@ const Contact = () => {
     <Box id="contact-section" sx={{ textAlign: "center", my: 6 }}>
       <Typography
         variant="h4"
-        sx={{ mb: 6, fontWeight: "bold", color: "#e91a22" }}
+        sx={{ mb: 6, fontWeight: "bold", color: "black" }}
       >
-        LẨU NẤM GIA KHÁNH
+        NHÀ HÀNG 5 SAO
       </Typography>
 
       <Box sx={{ margin: "0px 80px" }}>
@@ -45,7 +45,7 @@ const Contact = () => {
               Điện thoại
             </Typography>
             <Typography variant="body1" sx={{ color: "#0e0202" }}>
-              {data.data.phone}
+              {data.data.phoneNumber}
             </Typography>
           </Grid>
 
@@ -69,7 +69,7 @@ const Contact = () => {
               Website
             </Typography>
             <Typography variant="body1" sx={{ color: "#0e0202" }}>
-              https://launamgiakhanh.vn/
+              https://nhahang5sao.vn/
             </Typography>
           </Grid>
         </Grid>

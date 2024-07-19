@@ -4,7 +4,7 @@ const useStyles = makeStyles(() => ({
   title: {
     textAlign: "center",
     textTransform: "uppercase",
-    color: "#e91a22",
+    color: "black",
     "&.MuiTypography-root": {
       marginBottom: "32px",
       fontWeight: "bold",
@@ -14,18 +14,18 @@ const useStyles = makeStyles(() => ({
     "&.MuiButtonBase-root": {
       borderRadius: "8px",
       fontSize: "16px",
-      color: "#620b0e",
+      color: "#4B2C20",
       border: "none",
       margin: "0px 8px",
       textTransform: "none",
-      backgroundColor: "#f9eccb",
+      backgroundColor: "#D5BBA2",
       "&:hover": {
         outline: "none",
-        backgroundColor: "#e0b686",
+        backgroundColor: "#B89574",
       },
       "&:focus": {
         outline: "none",
-        backgroundColor: "#e91a22",
+        backgroundColor: "#4B2C20",
         color: "#fff",
       },
     },

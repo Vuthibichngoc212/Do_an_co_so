@@ -19,7 +19,7 @@ export const apiCaller = createApi({
     }),
     getUsers: builder.query<IEmployeeResponse, void>({
       query: () => ({
-        url: `/users/all?page=0&limit=10`,
+        url: `/users/all?page=0&limit=100`,
         method: "GET",
       }),
     }),
@@ -51,35 +51,28 @@ export const apiCaller = createApi({
     }),
     getMenu: builder.query<IMenuResponse, void>({
       query: () => ({
-        url: `/menu/all?page=0&limit=10`,
+        url: `/menu/all?page=0&limit=100`,
         method: "GET",
       }),
     }),
     filterMenu: builder.query<IMenuResponse, { category: string }>({
       query: ({ category }) => ({
-        url: `/menu/${category}?page=0&limit=10`,
+        url: `/menu/${category}?page=0&limit=100`,
         method: "GET",
       }),
     }),
     getTable: builder.query<ITableResponse, void>({
       query: () => ({
-        url: `/tables/all?page=0&limit=10`,
+        url: `/tables/all?page=0&limit=100`,
         method: "GET",
-      }),
-    }),
-    deleteTable: builder.mutation<void, { tableId: number }>({
-      query: ({ tableId }) => ({
-        url: `/tables/${tableId}`,
-        method: "DELETE",
       }),
     }),
     addTable: builder.mutation<void, { numberOfTable: number }>({
       query: ({ numberOfTable }) => ({
         url: `/tables/add?numberOfTables=${numberOfTable}`,
-        method: 'POST',
+        method: "POST",
       }),
     }),
-    
   }),
 });
 
@@ -93,6 +86,5 @@ export const {
   useGetMenuQuery,
   useFilterMenuQuery,
   useGetTableQuery,
-  useDeleteTableMutation,
   useAddTableMutation,
 } = apiCaller;

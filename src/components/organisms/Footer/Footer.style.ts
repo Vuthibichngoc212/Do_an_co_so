@@ -2,8 +2,8 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
   container: {
-    backgroundColor: "#800e13",
-    color: "hsl(358 83% 76% / 1)",
+    backgroundColor: "#4E8D7C",
+    color: "#fff",
     padding: "3rem 0",
   },
   colTitle: {

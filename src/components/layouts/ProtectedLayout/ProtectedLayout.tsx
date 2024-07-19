@@ -26,7 +26,7 @@ function ProtectedLayout() {
     location.pathname.startsWith("/admin/table");
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", backgroundColor: "#f6f2ed" }}>
       {isAdminDashboardPath && (
         <>
           <SideBar />

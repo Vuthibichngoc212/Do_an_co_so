@@ -51,6 +51,7 @@ export default function Header() {
         zIndex: 1000,
         padding: "6px 16px",
         borderBottom: "1px solid #e0e0e0",
+        borderRadius: "10px",
       }}
     >
       <StyledIconButton aria-label="search" size="medium">

@@ -4,6 +4,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import LanguageIcon from "@mui/icons-material/Language";
 import useStyles from "./Footer.style";
 import { Link as ScrollLink } from "react-scroll";
+import logoRes from "../../../assets/logoRes.png";
 import { useSettingUserQuery } from "../../../redux/api/api.caller";
 
 const Footer: React.FC = () => {
@@ -28,7 +29,7 @@ const Footer: React.FC = () => {
             </Typography>
             <Typography variant="body2" className={classes.contentColTitle1}>
               <LanguageIcon sx={{ marginRight: "8px" }} />
-              Website: www.launamgiakhanh.vn
+              Website: www.nhahang5sao.vn
             </Typography>
           </Grid>
 
@@ -43,7 +44,7 @@ const Footer: React.FC = () => {
                   fontSize: "20px",
                 }}
               >
-                {data.data.phone}
+                {data.data.phoneNumber}
               </Typography>
             </Box>
 
