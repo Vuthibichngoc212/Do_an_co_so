@@ -112,7 +112,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead>
+    <TableHead
+      sx={{
+        borderRadius: "16px",
+        bgcolor: "#F9FAFB",
+      }}
+    >
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
@@ -201,15 +206,16 @@ export default function TableOfTable() {
   }
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", borderRadius: "16px" }}>
       <Paper
         sx={{
           width: "100%",
           mb: 2,
+          borderRadius: "16px",
           boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)",
         }}
       >
-        <TableContainer>
+        <TableContainer sx={{ borderRadius: "16px" }}>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
               order={order}
