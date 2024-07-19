@@ -1,8 +1,15 @@
-import { Card, Typography, Box } from "@mui/material";
+import { Card, Typography, Box, CircularProgress } from "@mui/material";
 import WhatshotOutlinedIcon from "@mui/icons-material/WhatshotOutlined";
 import Divider from "@mui/material/Divider";
 import HotOrderCard from "../HotOrderCard/HotOrderCard";
+import { useGetHotMenuQuery } from "../../../../../redux/api/api.caller";
+
 export default function HotOrder() {
+  const { data, error, isLoading } = useGetHotMenuQuery();
+
+  if (isLoading) return <CircularProgress />;
+  if (error) return <Typography color="error">Failed to load data</Typography>;
+  console.log(data);
   return (
     <Card
       sx={{
@@ -23,18 +30,19 @@ export default function HotOrder() {
           Trending Order
         </Typography>
       </Box>
-      <HotOrderCard />
-      <Divider></Divider>
-      <HotOrderCard />
-      <Divider></Divider>
 
-      <HotOrderCard />
-      <Divider></Divider>
-
-      <HotOrderCard />
-      <Divider></Divider>
-
-      <HotOrderCard />
+      {data?.data.menuItemResponseList?.slice(0, 5).map((item, index) => (
+        <div key={item.id}>
+          <HotOrderCard
+            name={item.itemName}
+            price={item.price}
+            image={item.image}
+            orderCount={10}
+            rank={index + 1}
+          />
+          <Divider />
+        </div>
+      ))}
     </Card>
   );
 }

@@ -1,6 +1,20 @@
 import { Card, Box, Typography } from "@mui/material";
 
-const HotOrderCard: React.FC = () => {
+interface HotOrderCardProps {
+  name: string;
+  price: number;
+  image: string;
+  orderCount: number;
+  rank: number;
+}
+
+const HotOrderCard: React.FC<HotOrderCardProps> = ({
+  name,
+  price,
+  image,
+  orderCount,
+  rank,
+}) => {
   return (
     <Card
       sx={{
@@ -19,17 +33,18 @@ const HotOrderCard: React.FC = () => {
           color="initial"
           sx={{ bgcolor: "#eee", p: 1, borderRadius: 2, mr: 2 }}
         >
-          #1
+          #{rank}
         </Typography>
       </Box>
       <Box
         component="img"
-        src="https://plus.unsplash.com/premium_photo-1683121324230-2702ea6b47be?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZmFzdCUyMGZvb2R8ZW58MHx8MHx8fDA%3D"
+        src={image}
         sx={{
           width: 70,
           height: 70,
           borderRadius: "30%",
           ml: "auto",
+          objectFit: "cover",
         }}
       />
       <Box
@@ -44,7 +59,7 @@ const HotOrderCard: React.FC = () => {
         }}
       >
         <Typography variant="h6" sx={{ color: "initial", fontWeight: "bold" }}>
-          Apple Juice
+          {name}
         </Typography>
         <Box
           sx={{
@@ -54,16 +69,16 @@ const HotOrderCard: React.FC = () => {
           }}
         >
           <Typography variant="body1" color="initial">
-            $30
+            ${price}
           </Typography>
           <Typography
             variant="body1"
             color="initial"
-            sx={{ display: "flex", justifyContent: "space-betweens" }}
+            sx={{ display: "flex", justifyContent: "space-between" }}
           >
             Order{" "}
             <Typography variant="body1" color="initial" ml={1}>
-              30
+              {orderCount}
             </Typography>
           </Typography>
         </Box>

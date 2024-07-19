@@ -102,6 +102,12 @@ export const apiCaller = createApi({
         method: "GET",
       }),
     }),
+    getHotMenu: builder.query<IMenuResponse, void>({
+      query: () => ({
+        url: `/menu/all?page=0&limit=5`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -120,4 +126,5 @@ export const {
   useAddMenuMutation,
   useGetCategoryQuery,
   useUpdateMenuMutation,
+  useGetHotMenuQuery,
 } = apiCaller;
