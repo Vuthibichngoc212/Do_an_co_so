@@ -154,8 +154,32 @@ const EditMenuItem: React.FC<EditMenuItemProps> = ({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave} variant="contained" color="primary">
+          <Button
+            onClick={onClose}
+            variant="outlined"
+            sx={{
+              backgroundColor: "#FFF",
+              textTransform: "none",
+              color: "#4E8D7C",
+              borderColor: "#4E8D7C",
+              "&:hover": {
+                backgroundColor: "#3A6B5D",
+                color: "#FFF",
+                borderColor: "#3A6B5D",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            variant="contained"
+            sx={{
+              backgroundColor: "#4E8D7C",
+              textTransform: "none",
+              "&:hover": { backgroundColor: "#3A6B5D" },
+            }}
+          >
             {isAddMode ? "Add" : "Save"}
           </Button>
         </DialogActions>

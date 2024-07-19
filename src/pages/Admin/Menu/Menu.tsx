@@ -69,6 +69,11 @@ export default function Menu() {
           startIcon={<AddCircleOutlineIcon />}
           variant="contained"
           onClick={handleOpenDialog}
+          sx={{
+            backgroundColor: "#4E8D7C",
+            textTransform: "none",
+            "&:hover": { backgroundColor: "#3A6B5D" },
+          }}
         >
           Add
         </Button>
