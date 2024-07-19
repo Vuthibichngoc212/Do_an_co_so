@@ -29,7 +29,7 @@ function createData(stt: number, id: number, status: string): Data {
 }
 
 const headCells: {
-  id: keyof Data;
+  id: keyof ITableItem;
   numeric: boolean;
   disablePadding: boolean;
   label: string;
@@ -59,7 +59,7 @@ type Order = "asc" | "desc";
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof ITableItem
   ) => void;
   order: Order;
   orderBy: string;
@@ -76,7 +76,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-function getComparator<Key extends keyof Data>(
+function getComparator<Key extends keyof ITableItem>(
   order: Order,
   orderBy: Key
 ): (
@@ -107,7 +107,7 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof ITableItem) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
