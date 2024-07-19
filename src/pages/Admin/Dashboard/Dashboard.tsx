@@ -1,4 +1,4 @@
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
@@ -9,12 +9,8 @@ import HotOrder from "./components/HotOrder/HotOrder";
 
 const Dashboard = () => {
   return (
-    <Box sx={{ p: 2 }}>
-      <Box sx={{ mb: 2 }}>
-        <Typography variant="h4" color="initial">
-          Dashboard
-        </Typography>
-      </Box>
+    <Box sx={{ paddingTop: "10px" }}>
+      <Box sx={{ mb: 2 }}></Box>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} md={4}>
           <BasicCard

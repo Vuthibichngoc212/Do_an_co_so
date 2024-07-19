@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import TableOfTable from "./TableOfTable";
 import { useState } from "react";
 import AddTableDialog from "./AddTableDialog/AddTableDialog";
@@ -16,12 +16,7 @@ export default function Table() {
 
   return (
     <Box>
-      <Box sx={{ my: 2 }}>
-        <Typography variant="h4" color="initial">
-          Table
-        </Typography>
-      </Box>
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ my: 3 }}>
         <Button
           variant="contained"
           onClick={handleOpenDialog}

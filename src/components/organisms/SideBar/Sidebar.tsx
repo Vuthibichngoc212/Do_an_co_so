@@ -20,8 +20,7 @@ import logoRes from "../../../assets/logoRes.png";
 import CopyrightMini from "../../layouts/Copyright/MiniCopyright";
 import { useStyles } from "./Sidebar.styles";
 
-const drawerWidth = 200;
-
+const drawerWidth = 267;
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -98,10 +97,10 @@ const SideBar: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<string>("");
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", Icon: DashboardIcon },
-    { id: "employee", label: "Employee", Icon: PeopleIcon },
-    { id: "menu", label: "Menu", Icon: MenuBookIcon },
-    { id: "table", label: "Table", Icon: TableBarIcon },
+    { id: "dashboard", label: "Tổng quan", Icon: DashboardIcon },
+    { id: "employee", label: "Nhân viên", Icon: PeopleIcon },
+    { id: "menu", label: "Thực đơn", Icon: MenuBookIcon },
+    { id: "table", label: "Bàn", Icon: TableBarIcon },
   ];
 
   useEffect(() => {
@@ -128,14 +127,13 @@ const SideBar: React.FC = () => {
         sx={{
           "&.MuiDrawer-root": {
             position: "relative",
-            width: "248px",
             "& > .MuiPaper-root": {
               overflow: "visible",
               boxShadow:
                 "rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px",
               border: "none",
               padding: open ? "24px 24px 0px 24px" : 0,
-              backgroundColor: "#f6f2ed",
+              width: open ? "200px" : "65px",
               "& > div:first-of-type": {
                 display: "flex",
                 justifyContent: "center !important",
@@ -158,13 +156,13 @@ const SideBar: React.FC = () => {
             <img
               src={logoRes}
               alt="logo"
-              style={{ width: open ? "150px" : "50px" }}
+              style={{ width: open ? "120px" : "30px" }}
             />
           </Box>
         </DrawerHeader>
         <Divider />
         <List>
-          <Box>
+          <Box sx={{ marginTop: "10px" }}>
             {menuItems.map((item) => (
               <ListItem
                 button

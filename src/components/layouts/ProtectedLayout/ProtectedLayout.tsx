@@ -26,14 +26,14 @@ function ProtectedLayout() {
     location.pathname.startsWith("/admin/table");
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "#f6f2ed" }}>
+    <Box sx={{ display: "flex" }}>
       {isAdminDashboardPath && (
         <>
           <SideBar />
           <Stack
             sx={{
               width: "100%",
-              padding: 3,
+              padding: 2,
             }}
           >
             <Header />
