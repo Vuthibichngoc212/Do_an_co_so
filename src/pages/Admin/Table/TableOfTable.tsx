@@ -31,17 +31,13 @@ import {
   useAddTableMutation,
 } from "../../../redux/api/api.caller";
 import { ITableItem } from "../../../types/table";
-interface Data {
-  id: number;
-  status: string;
-}
 
-function createData(id: number, status: string): Data {
+function createData(id: number, status: string): ITableItem {
   return { id, status };
 }
 
 const headCells: {
-  id: keyof Data;
+  id: keyof ITableItem;
   numeric: boolean;
   disablePadding: boolean;
   label: string;
@@ -67,7 +63,7 @@ interface EnhancedTableProps {
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof ITableItem
   ) => void;
   order: Order;
   orderBy: string;
@@ -84,7 +80,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-function getComparator<Key extends keyof Data>(
+function getComparator<Key extends keyof ITableItem>(
   order: Order,
   orderBy: Key
 ): (
@@ -122,7 +118,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof ITableItem) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -217,14 +213,14 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 export default function TableOfTable() {
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof Data>("status");
+  const [orderBy, setOrderBy] = useState<keyof ITableItem>("status");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openDialog, setOpenDialog] = useState(false);
   const [numberOfTables, setNumberOfTables] = useState(1);
   const { data, error, isLoading } = useGetTableQuery();
-  const [rows, setRows] = useState<Data[]>([]);
+  const [rows, setRows] = useState<ITableItem[]>([]);
   const [addTableMutation] = useAddTableMutation();
   useEffect(() => {
     if (data && data.data && Array.isArray(data.data)) {
@@ -239,7 +235,7 @@ export default function TableOfTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data
+    property: keyof ITableItem
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
