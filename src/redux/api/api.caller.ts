@@ -20,7 +20,7 @@ export const apiCaller = createApi({
     }),
     getUsers: builder.query<IEmployeeResponse, void>({
       query: () => ({
-        url: `/users/all?page=0&limit=10`,
+        url: `/users/all?page=0&limit=100`,
         method: "GET",
       }),
     }),
@@ -29,6 +29,19 @@ export const apiCaller = createApi({
         url: "/users/create",
         method: "POST",
         body: users,
+      }),
+    }),
+    updateUsers: builder.mutation({
+      query: ({ userId, ...users }) => ({
+        url: `/users/update/${userId}`,
+        method: "PUT",
+        body: users,
+      }),
+    }),
+    deleteUsers: builder.mutation({
+      query: (userId: string) => ({
+        url: `/users/delete/${userId}`,
+        method: "DELETE",
       }),
     }),
     settingUser: builder.query<IUserResponse, void>({
@@ -67,7 +80,7 @@ export const apiCaller = createApi({
     ),
     filterMenu: builder.query<IMenuResponse, { category: string }>({
       query: ({ category }) => ({
-        url: `/menu/${category}?page=0&limit=10`,
+        url: `/menu/${category}?page=0&limit=100`,
         method: "GET",
       }),
     }),
@@ -75,12 +88,6 @@ export const apiCaller = createApi({
       query: () => ({
         url: `/tables/all?page=0&limit=100`,
         method: "GET",
-      }),
-    }),
-    deleteTable: builder.mutation<void, { tableId: number }>({
-      query: ({ tableId }) => ({
-        url: `/tables/${tableId}`,
-        method: "DELETE",
       }),
     }),
     addTable: builder.mutation<void, { numberOfTable: number }>({
@@ -101,12 +108,13 @@ export const apiCaller = createApi({
 export const {
   useGetUsersQuery,
   useCreateUsersMutation,
+  useUpdateUsersMutation,
+  useDeleteUsersMutation,
   useLoginMutation,
   useSettingUserQuery,
   useGetMenuQuery,
   useFilterMenuQuery,
   useGetTableQuery,
-  useDeleteTableMutation,
   useAddTableMutation,
   useDeleteMenuMutation,
   useAddMenuMutation,

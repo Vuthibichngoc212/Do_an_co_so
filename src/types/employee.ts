@@ -2,7 +2,8 @@ export interface IEmployee {
   id: number;
   username: string;
   password: string;
-  name: string;
+  retypePassword: string;
+  fullname: string;
   email: string;
   phoneNumber: string;
   address: string;

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
+import logoRes from "../../../assets/logoRes.png";
 import { scroller, Link as ScrollLink } from "react-scroll";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -63,7 +64,7 @@ function MenuBar() {
   }, []);
 
   return (
-    <AppBar sx={{ backgroundColor: "#fff" }}>
+    <AppBar sx={{ backgroundColor: "#f6f2ed" }}>
       <Box
         sx={{
           display: "flex",
@@ -72,20 +73,13 @@ function MenuBar() {
           height: "100px",
         }}
       >
-        <Typography
-          onClick={() => navigate("/")}
-          variant="h6"
-          component="a"
-          href=""
-          sx={{
-            color: "black",
-            marginLeft: "5rem",
-            display: { xs: "none", md: "flex" },
-            textDecoration: "none",
-          }}
-        >
-          LOGO
-        </Typography>
+        <Box sx={{ marginLeft: "50px" }} onClick={() => navigate("/")}>
+          <img
+            src={logoRes}
+            alt="logo"
+            style={{ width: "100px", height: "auto" }}
+          />
+        </Box>
 
         <Box
           sx={{
@@ -170,12 +164,12 @@ function MenuBar() {
                 onClick={() => handlePageClick(page.to)}
                 sx={{
                   my: 2,
-                  color: currentPage === page.to ? "#e91a22" : "black",
+                  color: currentPage === page.to ? "#B89574" : "#272727",
                   fontSize: "18px",
                   fontWeight: "bold",
                   textTransform: "uppercase",
                   "&:hover": {
-                    color: "#e91a22",
+                    color: "#B89574",
                   },
                 }}
               >
