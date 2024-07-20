@@ -50,7 +50,7 @@ const AboutSection = () => {
             }}
           >
             Chào mừng đến với{" "}
-            <span style={{ color: "#4E8D7C" }}>nhà hàng ABC</span>
+            <span style={{ color: "#4E8D7C" }}>nhà hàng 5 sao</span>
           </Typography>
           <Typography variant="body1" sx={{ color: "#625b5b", mb: 4 }}>
             Thương hiệu Nhà Hàng 5 Sao được thành lập năm 2008, phát triển không

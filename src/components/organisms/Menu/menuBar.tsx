@@ -73,7 +73,10 @@ function MenuBar() {
           height: "100px",
         }}
       >
-        <Box sx={{ marginLeft: "50px" }} onClick={() => navigate("/")}>
+        <Box
+          sx={{ marginLeft: "50px", display: { xs: "none", md: "block" } }}
+          onClick={() => navigate("/")}
+        >
           <img
             src={logoRes}
             alt="logo"
@@ -128,20 +131,17 @@ function MenuBar() {
           </Menu>
         </Box>
 
-        <Typography
-          variant="h5"
-          noWrap
-          component="a"
-          href=""
-          sx={{
-            color: "black",
-            display: { xs: "flex", md: "none" },
-            flexGrow: 1,
-            textDecoration: "none",
-          }}
+        <Box
+          sx={{ marginLeft: "50px", display: { xs: "block", md: "none" } }}
+          onClick={() => navigate("/")}
         >
-          LOGO
-        </Typography>
+          <img
+            src={logoRes}
+            alt="logo"
+            style={{ width: "100px", height: "auto" }}
+          />
+        </Box>
+
         <Box
           sx={{
             marginRight: "5rem",
@@ -182,4 +182,5 @@ function MenuBar() {
     </AppBar>
   );
 }
+
 export default MenuBar;
