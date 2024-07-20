@@ -1,4 +1,5 @@
 export interface ITableItem {
+  stt: number;
   id: number;
   status: string;
 }

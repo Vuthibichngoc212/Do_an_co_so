@@ -9,7 +9,6 @@ export default function HotOrder() {
 
   if (isLoading) return <CircularProgress />;
   if (error) return <Typography color="error">Failed to load data</Typography>;
-  console.log(data);
   return (
     <Card
       sx={{

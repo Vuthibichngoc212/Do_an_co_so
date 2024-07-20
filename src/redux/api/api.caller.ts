@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import customBaseQuery from "./fetchBase";
 import { IUserResponse } from "../../types/users";
@@ -69,15 +70,13 @@ export const apiCaller = createApi({
         method: "DELETE",
       }),
     }),
-    updateMenu: builder.mutation<void, { menuId: number; menuItem: IMenuItem }>(
-      {
-        query: ({ menuId, menuItem }) => ({
-          url: `/menu/updateItem/${menuId}`,
-          method: "PUT",
-          body: menuItem,
-        }),
-      }
-    ),
+    updateMenu: builder.mutation<any, any>({
+      query: (body) => ({
+        url: `menu/updateItem/${body.id}`,
+        method: "PUT",
+        body,
+      }),
+    }),
     filterMenu: builder.query<IMenuResponse, { category: string }>({
       query: ({ category }) => ({
         url: `/menu/${category}?page=0&limit=100`,
@@ -108,6 +107,13 @@ export const apiCaller = createApi({
         method: "GET",
       }),
     }),
+    getURLImage: builder.mutation<{ data: string }, FormData>({
+      query: (formData) => ({
+        url: `/menu/getUrlImage`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
   }),
 });
 
@@ -127,4 +133,5 @@ export const {
   useGetCategoryQuery,
   useUpdateMenuMutation,
   useGetHotMenuQuery,
+  useGetURLImageMutation,
 } = apiCaller;

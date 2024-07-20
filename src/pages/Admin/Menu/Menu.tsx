@@ -1,70 +1,96 @@
-import { Box, Typography, Button, Snackbar, Alert } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import MenuTable from "./components/MenuTable";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import AddMenuItem from "./components/AddMenuItem";
-import { IMenuItem } from "../../../types/menu";
-import { useAddMenuMutation } from "../../../redux/api/api.caller";
+import AddMenuItem from "./components/AddMenuItemDialog/AddMenuItem";
+import {
+  useAddMenuMutation,
+  useUpdateMenuMutation,
+} from "../../../redux/api/api.caller";
 import CustomSnackbar from "../../../components/organisms/snashbarMessage/CustomSnackbar";
 import { useGetMenuQuery } from "../../../redux/api/api.caller";
+import { IMenuItem } from "../../../types/menu";
 
 export default function Menu() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
-  const { data: menuData, refetch } = useGetMenuQuery();
-
+  const { refetch } = useGetMenuQuery();
+  const [selectedMenuItem, setSelectedMenuItem] = useState<any | null>(null);
+  const [mode, setMode] = useState<"add" | "edit">("add");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+
   const handleOpenDialog = () => {
+    setMode("add");
+    setSelectedMenuItem(null);
     setOpenDialog(true);
   };
-  const [addMenuMutation, { isLoading }] = useAddMenuMutation();
 
-  const handleAddMenuItem = (newMenuItem: {
-    itemName: string;
-    price: number;
-    image: string;
-    category: string;
-  }) => {
+  const [addMenuMutation] = useAddMenuMutation();
+  const [editMenuMutation] = useUpdateMenuMutation();
+
+  const handleSaveMenuItem = (menuItem: IMenuItem) => {
     const menuItemData = {
-      itemName: newMenuItem.itemName,
-      price: newMenuItem.price,
-      image: newMenuItem.image,
-      categoryName: newMenuItem.category,
+      itemName: menuItem.itemName,
+      price: menuItem.price,
+      image: menuItem.image,
+      categoryName: menuItem.category,
     };
-    console.log("Adding menu item:", menuItemData);
-    addMenuMutation(menuItemData)
-      .then(() => {
-        setSnackbarMessage("Added successfully!");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
-        handleCloseDialog();
-        refetch();
-      })
-      .catch((error) => {
-        setSnackbarMessage("Error adding menu item!");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-        console.error("Error adding menu item:", error);
-        // Handle error as needed
-      });
+
+    if (mode === "add") {
+      addMenuMutation(menuItemData)
+        .then(() => {
+          setSnackbarMessage("Thêm thành công!");
+          setSnackbarSeverity("success");
+          setSnackbarOpen(true);
+          handleCloseDialog();
+          refetch();
+        })
+        .catch((error) => {
+          setSnackbarMessage("Lỗi khi thêm thực đơn!");
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+          console.error("Error adding menu item:", error);
+        });
+    } else {
+      const editPayload = { ...menuItemData, id: menuItem.id };
+      editMenuMutation(editPayload)
+        .then(() => {
+          setSnackbarMessage("Chỉnh sửa thành công!");
+          setSnackbarSeverity("success");
+          setSnackbarOpen(true);
+          handleCloseDialog();
+          refetch();
+        })
+        .catch((error) => {
+          setSnackbarMessage("Lỗi khi chỉnh sửa thực đơn!");
+          setSnackbarSeverity("error");
+          setSnackbarOpen(true);
+          console.error("Error editing menu item:", error);
+        });
+    }
+  };
+
+  const handleEditMenuItem = (menuItem: IMenuItem) => {
+    setSelectedMenuItem(menuItem);
+    setMode("edit");
+    setOpenDialog(true);
   };
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h4" color="initial">
-          Menu
-        </Typography>
+    <Box>
+      <Box sx={{ my: 3, display: "flex", justifyContent: "flex-end" }}>
         <Button
           startIcon={<AddCircleOutlineIcon />}
           variant="contained"
@@ -75,14 +101,16 @@ export default function Menu() {
             "&:hover": { backgroundColor: "#3A6B5D" },
           }}
         >
-          Add
+          Thêm thực đơn
         </Button>
       </Box>
-      <MenuTable />
+      <MenuTable onEditItem={handleEditMenuItem} />
       <AddMenuItem
         open={openDialog}
         onClose={handleCloseDialog}
-        onSave={handleAddMenuItem}
+        mode={mode}
+        onSave={handleSaveMenuItem}
+        menuItem={selectedMenuItem}
       />
       <CustomSnackbar
         open={snackbarOpen}

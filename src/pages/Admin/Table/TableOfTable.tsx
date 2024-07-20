@@ -50,7 +50,7 @@ const headCells: {
     id: "status",
     numeric: false,
     disablePadding: false,
-    label: "Status",
+    label: "Trạng thái",
   },
 ];
 
@@ -125,7 +125,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={"left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ width: "33.3%", textAlign: "center", bgcolor: "#F9FAFB" }}
+            sx={{
+              width: "33.3%",
+              textAlign: "center",
+              bgcolor: "#F9FAFB",
+              fontWeight: "bold",
+            }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -216,7 +221,26 @@ export default function TableOfTable() {
         }}
       >
         <TableContainer sx={{ borderRadius: "16px" }}>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          <Table
+            sx={{
+              minWidth: 750,
+              "& thead th": {
+                backgroundColor: "#4E8D7C",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              },
+              "& tbody td": {
+                border: "1px solid #E0E0E0",
+              },
+              "& tbody tr": {
+                backgroundColor: "linear-gradient(to right, #f8f8f8, #e7e9ed)",
+              },
+              "& tbody tr:hover": {
+                backgroundColor: "#e0efe0",
+              },
+            }}
+            aria-labelledby="tableTitle"
+          >
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}

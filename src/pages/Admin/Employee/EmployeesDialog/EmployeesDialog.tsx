@@ -12,7 +12,9 @@ import {
   useUpdateUsersMutation,
 } from "../../../../redux/api/api.caller";
 import { useEffect } from "react";
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import useStyles from "./EmployeesDialog.style";
 
 export interface Props {
   open: boolean;
@@ -22,6 +24,7 @@ export interface Props {
 }
 
 const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
+  const classes = useStyles();
   const [addEmployees] = useCreateUsersMutation();
   const [updateEmployees] = useUpdateUsersMutation();
 
@@ -115,11 +118,24 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
             }}
           >
             {title}
+            <IconButton
+              aria-label="close"
+              onClick={onClose}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 15,
+                color: "black",
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
           </DialogTitle>
           <Divider />
           <DialogContent sx={{ padding: "10px 0px 0px" }}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <TextField
+                className={classes.textField}
                 placeholder="User Name"
                 margin="dense"
                 type="text"
@@ -130,6 +146,7 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
                 helperText={errors.username?.message}
               />
               <TextField
+                className={classes.textField}
                 placeholder="Password"
                 margin="dense"
                 type="text"
@@ -141,6 +158,7 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
               />
               {mode === "edit" && (
                 <TextField
+                  className={classes.textField}
                   placeholder="retypePassword"
                   margin="dense"
                   type="text"
@@ -154,7 +172,8 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
                 />
               )}
               <TextField
-                placeholder="FullName"
+                className={classes.textField}
+                placeholder="Họ tên"
                 margin="dense"
                 type="text"
                 fullWidth
@@ -166,6 +185,7 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
                 helperText={errors.fullname?.message}
               />
               <TextField
+                className={classes.textField}
                 placeholder="Email"
                 margin="dense"
                 fullWidth
@@ -175,7 +195,8 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
                 helperText={errors.email?.message}
               />
               <TextField
-                placeholder="Phone Number"
+                className={classes.textField}
+                placeholder="Số điện thoại"
                 margin="dense"
                 fullWidth
                 variant="outlined"
@@ -186,7 +207,8 @@ const EmployeesDialog = ({ open, onClose, mode, users }: Props) => {
                 helperText={errors.phoneNumber?.message}
               />
               <TextField
-                placeholder="Address"
+                className={classes.textField}
+                placeholder="Địa chỉ"
                 margin="dense"
                 fullWidth
                 variant="outlined"

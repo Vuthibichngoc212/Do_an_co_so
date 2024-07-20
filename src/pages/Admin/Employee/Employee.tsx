@@ -11,6 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 
 import {
   useDeleteUsersMutation,
@@ -116,7 +117,16 @@ const Employees = () => {
             "Thao tác",
           ]}
           onClickAddEmployees={handleAddEmployees}
-          columnWidths={["20px", "200px", "200px", "200px", "200px", "100px"]}
+          columnWidths={["5%", "10%", "20%", "20%", "15%", "20%", "10%"]}
+          columnAlignments={[
+            "center",
+            "center",
+            "center",
+            "center",
+            "center",
+            "center",
+            "center",
+          ]}
           rowsPerPage={rowsPerPage}
           page={page}
           handleChangePage={handleChangePage}
@@ -126,13 +136,23 @@ const Employees = () => {
           {paginatedEmployees.length > 0 &&
             paginatedEmployees.map((user, index) => (
               <TableRow key={user.id}>
-                <TableCell>{page * rowsPerPage + index + 1}</TableCell>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.fullname}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.phoneNumber}</TableCell>
-                <TableCell>{user.address}</TableCell>
-                <TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {page * rowsPerPage + index + 1}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {user.username}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {user.fullname}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>{user.email}</TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {user.phoneNumber}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
+                  {user.address}
+                </TableCell>
+                <TableCell sx={{ textAlign: "center" }}>
                   <Tooltip title="Edit">
                     <IconButton
                       sx={{
@@ -190,6 +210,18 @@ const Employees = () => {
             }}
           >
             Xóa nhân viên
+            <IconButton
+              aria-label="close"
+              onClick={handleCloseDeleteDialog}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 15,
+                color: "black",
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
           </DialogTitle>
           <Divider />
           <DialogContent>
@@ -202,12 +234,12 @@ const Employees = () => {
             <Button
               onClick={handleCloseDeleteDialog}
               sx={{
-                backgroundColor: "#4E8D7C",
-                color: "#fff",
+                border: "1px solid #4E8D7C",
+                color: "#4E8D7C",
                 "&.MuiButton-root": {
                   textTransform: "none",
                 },
-                "&:hover": { backgroundColor: "#3A6B5D" },
+                "&:hover": { backgroundColor: "#f7f7f7" },
               }}
             >
               Hủy bỏ

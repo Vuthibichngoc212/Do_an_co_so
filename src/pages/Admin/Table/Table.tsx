@@ -2,6 +2,7 @@ import { Box, Button } from "@mui/material";
 import TableOfTable from "./TableOfTable";
 import { useState } from "react";
 import AddTableDialog from "./AddTableDialog/AddTableDialog";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 export default function Table() {
   const [openDialog, setOpenDialog] = useState(false);
@@ -16,8 +17,9 @@ export default function Table() {
 
   return (
     <Box>
-      <Box sx={{ my: 3 }}>
+      <Box sx={{ my: 3, display: "flex", justifyContent: "flex-end" }}>
         <Button
+          startIcon={<AddCircleOutlineIcon />}
           variant="contained"
           onClick={handleOpenDialog}
           sx={{

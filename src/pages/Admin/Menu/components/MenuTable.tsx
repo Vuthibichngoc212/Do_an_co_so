@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -20,17 +21,18 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Divider,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import { IMenuItem } from "../../../../types/menu";
-import EditIcon from "@mui/icons-material/Edit";
-import EditMenuItem from "./EditMenuItem";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CustomSnackbar from "../../../../components/organisms/snashbarMessage/CustomSnackbar";
 import {
   useGetMenuQuery,
   useDeleteMenuMutation,
 } from "../../../../redux/api/api.caller";
+import LazyLoading from "../../../../components/LazyLoading";
 function createData(
   id: number,
   itemName: string,
@@ -51,20 +53,20 @@ const headCells: {
     id: "itemName",
     numeric: false,
     disablePadding: false,
-    label: "Item Name",
+    label: "Tên món ăn",
   },
   {
     id: "price",
     numeric: true,
     disablePadding: false,
-    label: "Price",
+    label: "Giá",
   },
 
   {
     id: "category",
     numeric: false,
     disablePadding: false,
-    label: "Category",
+    label: "Phân loại",
   },
 ];
 
@@ -145,9 +147,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{
-              width: "33.3%",
+              width: "30%",
               textAlign: "center",
               bgcolor: "#F9FAFB",
+              fontWeight: "bold",
             }}
           >
             {headCell.id === "category" ? (
@@ -171,23 +174,30 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           </TableCell>
         ))}
         <TableCell
-          sx={{ width: "33.3%", textAlign: "center", bgcolor: "#F9FAFB" }}
+          sx={{
+            textAlign: "center",
+            bgcolor: "#F9FAFB",
+            fontWeight: "bold",
+          }}
         >
-          Action
+          Thao tác
         </TableCell>
       </TableRow>
     </TableHead>
   );
 }
 
-export default function MenuTable() {
+interface MenuTableProps {
+  onEditItem: (menuItem: IMenuItem) => void;
+}
+
+export default function MenuTable({ onEditItem }: MenuTableProps) {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof IMenuItem>("category");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { data, error, isLoading } = useGetMenuQuery();
   const [rows, setRows] = useState<IMenuItem[]>([]);
-  const [openDialog, setOpenDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState<IMenuItem | null>(null);
   const [deleteMenuMutation] = useDeleteMenuMutation();
   const [confirmDeleteDialog, setConfirmDeleteDialog] = useState(false);
@@ -236,20 +246,9 @@ export default function MenuTable() {
     setPage(0);
   };
   const handleEdit = (item: IMenuItem) => {
-    setSelectedItem(item);
-    setOpenDialog(true);
+    onEditItem(item);
   };
 
-  const handleSave = (item: IMenuItem) => {
-    // Cập nhật menu item trong state
-    setRows((prevRows) =>
-      prevRows.map((row) => (row.id === item.id ? item : row))
-    );
-    setOpenDialog(false);
-    setSnackbarMessage("Updated successfully!");
-    setSnackbarSeverity("success");
-    setSnackbarOpen(true);
-  };
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -263,7 +262,7 @@ export default function MenuTable() {
   );
 
   if (isLoading) {
-    return <Typography>Loading...</Typography>;
+    return <LazyLoading />;
   }
 
   if (error) {
@@ -278,7 +277,6 @@ export default function MenuTable() {
     try {
       const selectedId = selectedItem?.id;
       if (selectedId !== undefined) {
-        console.log("Deleting menu item with id:", selectedId);
         await deleteMenuMutation({ menuId: selectedId });
         setRows((prevRows) => prevRows.filter((row) => row.id !== selectedId));
         setSnackbarMessage("Deleted successfully!");
@@ -313,7 +311,27 @@ export default function MenuTable() {
             borderRadius: "16px",
           }}
         >
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          <Table
+            sx={{
+              minWidth: 750,
+              "& thead th": {
+                backgroundColor: "#4E8D7C",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+              },
+              "& tbody td": {
+                border: "1px solid #E0E0E0",
+                color: "#333",
+              },
+              "& tbody tr": {
+                backgroundColor: "linear-gradient(to right, #f8f8f8, #e7e9ed)",
+              },
+              "& tbody tr:hover": {
+                backgroundColor: "#f0f7f0",
+              },
+            }}
+            aria-labelledby="tableTitle"
+          >
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
@@ -356,14 +374,48 @@ export default function MenuTable() {
                     </TableCell>
 
                     <TableCell sx={{ textAlign: "center" }}>
-                      <Tooltip title="Edit">
+                      {/* <Tooltip title="Edit">
                         <IconButton onClick={() => handleEdit(row)}>
                           <EditIcon />
                         </IconButton>
+                      </Tooltip> */}
+                      <Tooltip title="Edit">
+                        <IconButton
+                          sx={{
+                            color: "#4E8D7C",
+                            "&:hover": {
+                              color: "#3A6B5D",
+                            },
+                            "&:active": {
+                              color: "#4E8D7C",
+                            },
+                          }}
+                        >
+                          <BorderColorOutlinedIcon
+                            onClick={() => handleEdit(row)}
+                          />
+                        </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete" onClick={() => handleDelete(row)}>
+                      {/* <Tooltip title="Delete" onClick={() => handleDelete(row)}>
                         <IconButton>
                           <DeleteIcon />
+                        </IconButton>
+                      </Tooltip> */}
+                      <Tooltip title="Delete">
+                        <IconButton
+                          sx={{
+                            color: "rgb(219, 40, 40)",
+                            "&:hover": {
+                              color: "rgb(179, 33, 33)",
+                            },
+                            "&:active": {
+                              color: "rgb(219, 40, 40)",
+                            },
+                          }}
+                        >
+                          <DeleteOutlineIcon
+                            onClick={() => handleDelete(row)}
+                          />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
@@ -392,55 +444,64 @@ export default function MenuTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <EditMenuItem
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        item={selectedItem}
-        onSave={handleSave}
-      />
       <Dialog
         open={confirmDeleteDialog}
         onClose={handleCancelDelete}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this menu item?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleCancelDelete}
-            variant="outlined"
+        <Box sx={{ padding: "24px" }}>
+          <DialogTitle
+            id="alert-dialog-title"
             sx={{
-              backgroundColor: "#FFF",
-              textTransform: "none",
-              color: "#4E8D7C",
-              borderColor: "#4E8D7C",
-              "&:hover": {
-                backgroundColor: "#3A6B5D",
-                color: "#FFF",
-                borderColor: "#3A6B5D",
-              },
+              textAlign: "center",
+              padding: "0px 0px 16px 0px",
+              fontWeight: "bold",
             }}
           >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleConfirmDelete}
-            variant="contained"
-            sx={{
-              backgroundColor: "#4E8D7C",
-              textTransform: "none",
-              "&:hover": { backgroundColor: "#3A6B5D" },
-            }}
-            autoFocus
-          >
-            Delete
-          </Button>
-        </DialogActions>
+            {"Xóa thực đơn"}
+          </DialogTitle>
+          <Divider />
+          <DialogContent>
+            <DialogContentText
+              id="alert-dialog-description"
+              sx={{ color: "black" }}
+            >
+              Bạn có chắc chắn muốn xóa thực đơn này không?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleCancelDelete}
+              variant="outlined"
+              sx={{
+                border: "1px solid #4E8D7C",
+                color: "#4E8D7C",
+                "&.MuiButton-root": {
+                  textTransform: "none",
+                },
+                "&:hover": { backgroundColor: "#f7f7f7" },
+              }}
+            >
+              Hủy bỏ
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              variant="contained"
+              sx={{
+                backgroundColor: "#4E8D7C",
+                "&.MuiButton-root": {
+                  marginLeft: "20px",
+                  textTransform: "none",
+                },
+                "&:hover": { backgroundColor: "#3A6B5D" },
+              }}
+              autoFocus
+            >
+              Xác nhận
+            </Button>
+          </DialogActions>
+        </Box>
       </Dialog>
       <CustomSnackbar
         open={snackbarOpen}

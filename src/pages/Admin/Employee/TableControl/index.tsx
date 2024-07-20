@@ -11,11 +11,13 @@ import {
   Button,
   TablePagination,
 } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 interface Props {
   columns: string[];
   children: ReactNode;
   columnWidths?: string[];
+  columnAlignments?: ("left" | "center" | "right")[];
   onClickAddEmployees?: () => void;
   rowsPerPage: number;
   page: number;
@@ -28,6 +30,7 @@ const ReusableTable: React.FC<Props> = ({
   columns,
   children,
   columnWidths = [],
+  columnAlignments = [],
   onClickAddEmployees,
   rowsPerPage,
   page,
@@ -37,8 +40,9 @@ const ReusableTable: React.FC<Props> = ({
 }) => {
   return (
     <Box sx={{ width: "100%", mt: 3, overflow: "auto" }}>
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end" }}>
         <Button
+          startIcon={<AddCircleOutlineIcon />}
           variant="contained"
           onClick={onClickAddEmployees}
           sx={{
@@ -60,7 +64,6 @@ const ReusableTable: React.FC<Props> = ({
           sx={{
             mb: 2,
             border: "1px solid #ddd",
-
             borderRadius: "16px",
           }}
         >
@@ -70,7 +73,24 @@ const ReusableTable: React.FC<Props> = ({
             }}
           >
             <Table
-              sx={{ minWidth: 750, borderRadius: "16px" }}
+              sx={{
+                borderRadius: "16px",
+                "& thead th": {
+                  backgroundColor: "#4E8D7C",
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                },
+                "& tbody td": {
+                  border: "1px solid #E0E0E0",
+                },
+                "& tbody tr": {
+                  backgroundColor:
+                    "linear-gradient(to right, #f8f8f8, #e7e9ed)",
+                },
+                "& tbody tr:hover": {
+                  backgroundColor: "#e0efe0",
+                },
+              }}
               aria-label="customizable table"
             >
               <TableHead>
@@ -81,6 +101,7 @@ const ReusableTable: React.FC<Props> = ({
                       sx={{
                         fontWeight: "bold",
                         width: columnWidths[index] || "auto",
+                        textAlign: columnAlignments[index] || "left",
                       }}
                     >
                       {column}
